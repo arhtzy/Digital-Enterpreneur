@@ -1,0 +1,354 @@
+<!DOCTYPE html>
+<html lang="id" class="dark">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Digital Mart - Admin Workspace</title>
+    <!-- Tailwind CSS CDN -->
+    <script src="https://cdn.tailwindcss.com"></script>
+    <script>
+        tailwind.config = {
+            darkMode: 'class',
+            theme: {
+                extend: {
+                    colors: {
+                        brand: {
+                            50: '#eeeffe',
+                            100: '#e0e2fe',
+                            500: '#6366f1',
+                            600: '#4f46e5',
+                            700: '#4338ca',
+                        },
+                        slate: {
+                            850: '#172033',
+                            900: '#0f172a',
+                        }
+                    }
+                }
+            }
+        }
+    </script>
+    <!-- Lucide Icons CDN -->
+    <script src="https://unpkg.com/lucide@latest"></script>
+    <style>
+        @import url('https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@400;500;600;700&display=swap');
+        body { font-family: 'Plus Jakarta Sans', sans-serif; }
+    </style>
+</head>
+<body class="bg-slate-900 text-slate-100 min-h-screen transition-colors duration-200 p-4 md:p-6 flex justify-center items-center">
+
+    <!-- MAIN CONTAINER CARD -->
+    <div class="w-full max-w-[1400px] bg-slate-850 rounded-3xl shadow-xl border border-slate-800 flex flex-col md:flex-row overflow-hidden min-h-[850px]">
+
+        <!-- SIDEBAR KIRI -->
+        <aside class="w-full md:w-64 bg-slate-900/50 border-r border-slate-800 p-6 flex flex-col justify-between shrink-0">
+            <div class="space-y-8">
+                <!-- LOGO & BRAND -->
+                <div class="flex items-center gap-3 px-2">
+                    <div class="w-10 h-10 bg-brand-600 text-white rounded-xl flex items-center justify-center shadow-md shadow-brand-500/20">
+                        <i data-lucide="shopping-bag" class="w-5 h-5"></i>
+                    </div>
+                    <div>
+                        <h1 class="font-bold text-lg text-white leading-none">Digital Mart</h1>
+                    </div>
+                </div>
+
+                <!-- NAVIGATION MENU -->
+                <nav class="space-y-1.5">
+                    <a href="/admin" class="flex items-center gap-3 px-4 py-3 rounded-xl font-semibold text-sm bg-brand-500/10 text-brand-400 transition">
+                        <i data-lucide="layout-grid" class="w-5 h-5"></i>
+                        <span>Ringkasan</span>
+                    </a>
+                    <a href="#categories" onclick="openModal('modal-category')" class="flex items-center gap-3 px-4 py-3 rounded-xl font-medium text-sm text-slate-400 hover:bg-slate-800/50 transition">
+                        <i data-lucide="tag" class="w-5 h-5"></i>
+                        <span>Kategori</span>
+                    </a>
+                    <a href="#products" onclick="openModal('modal-product')" class="flex items-center gap-3 px-4 py-3 rounded-xl font-medium text-sm text-slate-400 hover:bg-slate-800/50 transition">
+                        <i data-lucide="box" class="w-5 h-5"></i>
+                        <span>Produk</span>
+                    </a>
+                    <a href="#stocks" onclick="openModal('modal-bulk-stock')" class="flex items-center gap-3 px-4 py-3 rounded-xl font-medium text-sm text-slate-400 hover:bg-slate-800/50 transition">
+                        <i data-lucide="layers" class="w-5 h-5"></i>
+                        <span>Stok</span>
+                    </a>
+                </nav>
+            </div>
+
+            <!-- FOOTER SIDEBAR -->
+            <div class="pt-6 border-t border-slate-800 px-2 space-y-1">
+                <h4 class="font-semibold text-xs text-white">Admin panel</h4>
+                <p class="text-xs text-slate-400 leading-relaxed">Kelola katalog, stok, dan pesanan dari satu tempat.</p>
+            </div>
+        </aside>
+
+        <!-- MAIN AREA KANAN -->
+        <div class="flex-1 p-6 md:p-8 space-y-8 bg-slate-850 overflow-y-auto">
+
+            <!-- HEADER ATAS -->
+            <header class="flex flex-col sm:flex-row sm:items-center justify-between gap-4">
+                <div>
+                    <h2 class="text-xl font-bold text-white">Digital Mart</h2>
+                    <p class="text-xs font-medium text-slate-400">Admin workspace</p>
+                </div>
+                <div class="flex items-center gap-3">
+                    <button id="theme-toggle" class="w-10 h-10 rounded-full border border-slate-700 flex items-center justify-center text-slate-300 hover:bg-slate-800 transition">
+                        <i data-lucide="sun" class="w-4 h-4"></i>
+                    </button>
+                    <div class="w-10 h-10 rounded-full bg-brand-500/20 text-brand-400 font-bold text-sm flex items-center justify-center border border-brand-500/30">
+                        G
+                    </div>
+                </div>
+            </header>
+
+            <!-- GREETING & QUICK ACTION -->
+            <div class="flex flex-col sm:flex-row sm:items-center justify-between gap-4">
+                <div>
+                    <h1 class="text-2xl font-bold text-white">Selamat datang, Gilang</h1>
+                    <p class="text-sm text-slate-400 mt-1">Berikut ringkasan toko digital kamu hari ini.</p>
+                </div>
+                <button onclick="openModal('modal-product')" class="px-5 py-2.5 bg-brand-600 hover:bg-brand-700 text-white rounded-xl font-semibold text-sm shadow-lg shadow-brand-500/25 flex items-center justify-center gap-2 transition self-start sm:self-auto">
+                    <i data-lucide="plus" class="w-4 h-4"></i> Tambah produk
+                </button>
+            </div>
+
+            <!-- METRICS CARD ROW -->
+            <div class="grid grid-cols-1 md:grid-cols-3 gap-5">
+                <!-- METRIC 1 -->
+                <div class="p-5 rounded-2xl border border-slate-800 bg-slate-900/50 space-y-3">
+                    <div class="flex items-center justify-between">
+                        <span class="text-xs font-semibold text-slate-400">Pendapatan toko</span>
+                        <div class="w-8 h-8 rounded-lg bg-brand-500/10 text-brand-400 flex items-center justify-center">
+                            <i data-lucide="mail" class="w-4 h-4"></i>
+                        </div>
+                    </div>
+                    <div>
+                        <h3 class="text-2xl font-bold text-white">Rp {{ stats.total_income }}</h3>
+                        <p class="text-xs font-medium text-emerald-400 mt-1.5 flex items-center gap-1">
+                            <span>↑ Total omset terverifikasi</span>
+                        </p>
+                    </div>
+                </div>
+
+                <!-- METRIC 2 -->
+                <div class="p-5 rounded-2xl border border-slate-800 bg-slate-900/50 space-y-3">
+                    <div class="flex items-center justify-between">
+                        <span class="text-xs font-semibold text-slate-400">Transaksi berhasil</span>
+                        <div class="w-8 h-8 rounded-lg bg-brand-500/10 text-brand-400 flex items-center justify-center">
+                            <i data-lucide="check-circle-2" class="w-4 h-4"></i>
+                        </div>
+                    </div>
+                    <div>
+                        <h3 class="text-2xl font-bold text-white">{{ stats.total_sales }}</h3>
+                        <p class="text-xs font-medium text-emerald-400 mt-1.5 flex items-center gap-1">
+                            <span>↑ {{ stats.total_sales }} transaksi sukses</span>
+                        </p>
+                    </div>
+                </div>
+
+                <!-- METRIC 3 -->
+                <div class="p-5 rounded-2xl border border-slate-800 bg-slate-900/50 space-y-3">
+                    <div class="flex items-center justify-between">
+                        <span class="text-xs font-semibold text-slate-400">Stok tersedia</span>
+                        <div class="w-8 h-8 rounded-lg bg-brand-500/10 text-brand-400 flex items-center justify-center">
+                            <i data-lucide="box" class="w-4 h-4"></i>
+                        </div>
+                    </div>
+                    <div>
+                        <h3 class="text-2xl font-bold text-white">{{ stats.total_stock }}</h3>
+                        <p class="text-xs font-medium text-emerald-400 mt-1.5 flex items-center gap-1">
+                            <span>Siap dikirim otomatis</span>
+                        </p>
+                    </div>
+                </div>
+            </div>
+
+            <!-- TWO COLUMNS GRID: TRANSAKSI TERBARU & KATEGORI -->
+            <div class="grid grid-cols-1 lg:grid-cols-3 gap-6">
+
+                <!-- TABEL TRANSAKSI TERBARU (LEBAR: 2 KOLOM) -->
+                <div class="lg:col-span-2 border border-slate-800 rounded-2xl p-5 bg-slate-900/50 space-y-4">
+                    <div class="flex items-center justify-between">
+                        <h3 class="font-bold text-base text-white">Transaksi terbaru</h3>
+                        <span class="text-xs font-semibold text-brand-400">Log Realtime</span>
+                    </div>
+
+                    <div class="overflow-x-auto">
+                        <table class="w-full text-left border-collapse text-xs">
+                            <thead>
+                                <tr class="text-slate-400 font-semibold border-b border-slate-800">
+                                    <th class="py-3 px-2">PESANAN</th>
+                                    <th class="py-3 px-2">PELANGGAN</th>
+                                    <th class="py-3 px-2">STATUS</th>
+                                    <th class="py-3 px-2 text-right">TOTAL</th>
+                                </tr>
+                            </thead>
+                            <tbody class="divide-y divide-slate-800">
+                                {% for trx in stats.recent_transactions %}
+                                <tr class="hover:bg-slate-800/30 transition">
+                                    <td class="py-3.5 px-2">
+                                        <div class="flex items-center gap-3">
+                                            <div class="w-8 h-8 rounded-lg bg-brand-500/10 text-brand-400 font-bold flex items-center justify-center">
+                                                P
+                                            </div>
+                                            <div>
+                                                <p class="font-semibold text-slate-200">{{ trx[2] }}</p>
+                                                <p class="text-[10px] text-slate-400">{{ trx[0] }}</p>
+                                            </div>
+                                        </div>
+                                    </td>
+                                    <td class="py-3.5 px-2 font-medium text-slate-300">ID: {{ trx[1] }}</td>
+                                    <td class="py-3.5 px-2">
+                                        {% if trx[4] == 'PAID' %}
+                                        <span class="px-2.5 py-1 text-[11px] font-bold rounded-md bg-emerald-500/10 text-emerald-400">PAID</span>
+                                        {% else %}
+                                        <span class="px-2.5 py-1 text-[11px] font-bold rounded-md bg-amber-500/10 text-amber-400">PENDING</span>
+                                        {% endif %}
+                                    </td>
+                                    <td class="py-3.5 px-2 text-right font-bold text-white">Rp {{ trx[3] }}</td>
+                                </tr>
+                                {% else %}
+                                <tr>
+                                    <td colspan="4" class="py-6 text-center text-slate-400">Belum ada transaksi terbaru</td>
+                                </tr>
+                                {% endfor %}
+                            </tbody>
+                        </table>
+                    </div>
+                </div>
+
+                <!-- LIST KATEGORI AKTIF (SEMPIT: 1 KOLOM) -->
+                <div class="border border-slate-800 rounded-2xl p-5 bg-slate-900/50 space-y-4">
+                    <div class="flex items-center justify-between">
+                        <h3 class="font-bold text-base text-white">Kategori aktif</h3>
+                        <button onclick="openModal('modal-category')" class="text-xs font-semibold text-brand-400 hover:underline">Kelola</button>
+                    </div>
+
+                    <div class="space-y-3">
+                        {% for cat in categories %}
+                        <div class="flex items-center justify-between p-3 rounded-xl border border-slate-800 hover:bg-slate-800/40 transition">
+                            <div class="flex items-center gap-3">
+                                <div class="w-10 h-10 rounded-xl bg-brand-500/10 text-brand-400 flex items-center justify-center">
+                                    {% if cat[2] %}
+                                    <img src="{{ cat[2] }}" class="w-5 h-5 object-contain">
+                                    {% else %}
+                                    <i data-lucide="tv" class="w-5 h-5"></i>
+                                    {% endif %}
+                                </div>
+                                <div>
+                                    <h4 class="font-semibold text-sm text-white">{{ cat[1] }}</h4>
+                                    <p class="text-xs text-slate-400">Produk Digital</p>
+                                </div>
+                            </div>
+                            <span class="font-bold text-sm text-slate-200">#{{ cat[0] }}</span>
+                        </div>
+                        {% else %}
+                        <div class="text-center py-6 text-slate-400 text-xs">Belum ada kategori. Klik "Kelola" untuk tambah.</div>
+                        {% endfor %}
+                    </div>
+                </div>
+
+            </div>
+
+        </div>
+    </div>
+
+    <!-- MODAL TAMBAH PRODUK -->
+    <div id="modal-product" class="fixed inset-0 bg-slate-900/60 backdrop-blur-sm hidden items-center justify-center p-4 z-50">
+        <div class="bg-slate-850 rounded-2xl p-6 max-w-md w-full border border-slate-800 space-y-4 shadow-2xl">
+            <div class="flex justify-between items-center">
+                <h3 class="font-bold text-lg text-white">Tambah Produk Baru</h3>
+                <button onclick="closeModal('modal-product')" class="text-slate-400 hover:text-slate-200"><i data-lucide="x"></i></button>
+            </div>
+            <form action="/admin/product/add" method="POST" class="space-y-3">
+                <div>
+                    <label class="block text-xs font-semibold text-slate-400 mb-1">Kode Unik (tanpa spasi)</label>
+                    <input type="text" name="code" required placeholder="netflix-1m" class="w-full px-3.5 py-2.5 rounded-xl bg-slate-800 border border-slate-700 text-sm text-white focus:outline-none focus:ring-2 focus:ring-brand-500">
+                </div>
+                <div>
+                    <label class="block text-xs font-semibold text-slate-400 mb-1">Nama Produk</label>
+                    <input type="text" name="name" required placeholder="Netflix Premium 1 Bulan" class="w-full px-3.5 py-2.5 rounded-xl bg-slate-800 border border-slate-700 text-sm text-white focus:outline-none focus:ring-2 focus:ring-brand-500">
+                </div>
+                <div>
+                    <label class="block text-xs font-semibold text-slate-400 mb-1">Harga (Rp)</label>
+                    <input type="number" name="price" required placeholder="35000" class="w-full px-3.5 py-2.5 rounded-xl bg-slate-800 border border-slate-700 text-sm text-white focus:outline-none focus:ring-2 focus:ring-brand-500">
+                </div>
+                <div>
+                    <label class="block text-xs font-semibold text-slate-400 mb-1">Kategori</label>
+                    <select name="category_id" class="w-full px-3.5 py-2.5 rounded-xl bg-slate-800 border border-slate-700 text-sm text-white focus:outline-none focus:ring-2 focus:ring-brand-500">
+                        <option value="">-- Pilih Kategori --</option>
+                        {% for cat in categories %}
+                        <option value="{{ cat[0] }}">{{ cat[1] }}</option>
+                        {% endfor %}
+                    </select>
+                </div>
+                <div>
+                    <label class="block text-xs font-semibold text-slate-400 mb-1">URL Logo (Opsional)</label>
+                    <input type="url" name="icon_url" placeholder="https://..." class="w-full px-3.5 py-2.5 rounded-xl bg-slate-800 border border-slate-700 text-sm text-white focus:outline-none focus:ring-2 focus:ring-brand-500">
+                </div>
+                <button type="submit" class="w-full py-3 bg-brand-600 hover:bg-brand-700 text-white rounded-xl font-semibold text-sm transition mt-2 shadow-lg shadow-brand-500/20">Simpan Produk</button>
+            </form>
+        </div>
+    </div>
+
+    <!-- MODAL BULK STOK -->
+    <div id="modal-bulk-stock" class="fixed inset-0 bg-slate-900/60 backdrop-blur-sm hidden items-center justify-center p-4 z-50">
+        <div class="bg-slate-850 rounded-2xl p-6 max-w-lg w-full border border-slate-800 space-y-4 shadow-2xl">
+            <div class="flex justify-between items-center">
+                <h3 class="font-bold text-lg text-white">Input Banyak Stok sekaligus</h3>
+                <button onclick="closeModal('modal-bulk-stock')" class="text-slate-400 hover:text-slate-200"><i data-lucide="x"></i></button>
+            </div>
+            <form action="/admin/stock/add-bulk" method="POST" class="space-y-3">
+                <div>
+                    <label class="block text-xs font-semibold text-slate-400 mb-1">Pilih Produk</label>
+                    <select name="product_code" required class="w-full px-3.5 py-2.5 rounded-xl bg-slate-800 border border-slate-700 text-sm text-white focus:outline-none focus:ring-2 focus:ring-brand-500">
+                        {% for item in products %}
+                        <option value="{{ item.code }}">{{ item.name }} ({{ item.code }})</option>
+                        {% endfor %}
+                    </select>
+                </div>
+                <div>
+                    <label class="block text-xs font-semibold text-slate-400 mb-1">Isi Stok (1 baris = 1 akun/lisensi)</label>
+                    <textarea name="stock_data" rows="6" required placeholder="email1@gmail.com:pass1&#10;email2@gmail.com:pass2" class="w-full px-3.5 py-2.5 rounded-xl bg-slate-800 border border-slate-700 text-sm font-mono text-white focus:outline-none focus:ring-2 focus:ring-brand-500"></textarea>
+                </div>
+                <button type="submit" class="w-full py-3 bg-brand-600 hover:bg-brand-700 text-white rounded-xl font-semibold text-sm transition shadow-lg shadow-brand-500/20">Upload Semua Stok</button>
+            </form>
+        </div>
+    </div>
+
+    <!-- MODAL TAMBAH KATEGORI -->
+    <div id="modal-category" class="fixed inset-0 bg-slate-900/60 backdrop-blur-sm hidden items-center justify-center p-4 z-50">
+        <div class="bg-slate-850 rounded-2xl p-6 max-w-md w-full border border-slate-800 space-y-4 shadow-2xl">
+            <div class="flex justify-between items-center">
+                <h3 class="font-bold text-lg text-white">Tambah Kategori Baru</h3>
+                <button onclick="closeModal('modal-category')" class="text-slate-400 hover:text-slate-200"><i data-lucide="x"></i></button>
+            </div>
+            <form action="/admin/category/add" method="POST" class="space-y-3">
+                <div>
+                    <label class="block text-xs font-semibold text-slate-400 mb-1">Nama Kategori</label>
+                    <input type="text" name="name" required placeholder="Streaming / Music / Game" class="w-full px-3.5 py-2.5 rounded-xl bg-slate-800 border border-slate-700 text-sm text-white focus:outline-none focus:ring-2 focus:ring-brand-500">
+                </div>
+                <div>
+                    <label class="block text-xs font-semibold text-slate-400 mb-1">URL Logo Kategori (Opsional)</label>
+                    <input type="url" name="icon_url" placeholder="https://..." class="w-full px-3.5 py-2.5 rounded-xl bg-slate-800 border border-slate-700 text-sm text-white focus:outline-none focus:ring-2 focus:ring-brand-500">
+                </div>
+                <button type="submit" class="w-full py-3 bg-slate-700 text-white rounded-xl font-semibold text-sm transition">Simpan Kategori</button>
+            </form>
+        </div>
+    </div>
+
+    <!-- JAVASCRIPT -->
+    <script>
+        lucide.createIcons();
+
+        function openModal(id) {
+            document.getElementById(id).classList.remove('hidden');
+            document.getElementById(id).classList.add('flex');
+        }
+
+        function closeModal(id) {
+            document.getElementById(id).classList.add('hidden');
+            document.getElementById(id).classList.remove('flex');
+        }
+    </script>
+</body>
+</html>
